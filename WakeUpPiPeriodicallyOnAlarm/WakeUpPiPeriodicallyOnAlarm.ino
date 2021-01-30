@@ -40,7 +40,7 @@ const int LED_PIN = 13;
 // ++++++++++++++++++++ CHANGE ME ++++++++++++++++++
 uint8_t  WakeUp_StartMinute   = 5;   // Minutes
 
-unsigned long    MAX_RPI_TIME_TO_STAY_AWAKE_MS  = 140000;       // in ms - so this is 60 seconds
+unsigned long    MAX_RPI_TIME_TO_STAY_AWAKE_MS  = 99000;       // in ms - so this is 60 seconds
 #define kPI_CURRENT_THRESHOLD_MA   110                         // Shutdown current threshold in mA. When the
                                                                // when the Rpi is below this, it is "shutdown"
                                                                // This will vary from Rpi model to Rpi model
@@ -62,26 +62,40 @@ void alarm_isr()
 //  - Helper routines
 //
 // **********************************************************************
-uint8_t CalcNextWakeTime(void)
-{
-  int interval[12] = {4, 9, 14, 19, 24,29, 34, 39, 44, 49, 54, 59};
-
+uint8_t CalcNextWakeTime(void) {
+  int interval[12] = {0, 5, 10, 15, 20,25, 30, 35, 40, 45, 50, 55};
   DateTime now = SleepyPi.readTime();
   int currentMinute = now.minute();
-
-  for (int i=0; i<12; ++i){
-    if (currentMinute+1 < interval[i]){ // +1 so that at least 2 minutes difference
+  for (int i=0; i<12; ++i) {
+    if (currentMinute+1 < interval[i]) { // +1 so that at least 2 minutes difference
       nextWakeTime = interval[i];
       break;
     }
   }
-
-  if (currentMinute >= 58){
-    nextWakeTime = 4;
+  if (currentMinute >= 54) {
+    nextWakeTime = 0;
   }
-
   return nextWakeTime;
 }
+
+// uint8_t CalcNextWakeTime(void)
+// {
+//   int interval[12] = {4, 9, 14, 19, 24,29, 34, 39, 44, 49, 54, 59};
+//   DateTime now = SleepyPi.readTime();
+//   int currentMinute = now.minute();
+//   for (int i=0; i<12; ++i){
+//     if (currentMinute+1 < interval[i]){ // +1 so that at least 2 minutes difference
+//       nextWakeTime = interval[i];
+//       break;
+//     }
+//   }
+//   if (currentMinute >= 58){
+//     nextWakeTime = 4;
+//   }
+//   return nextWakeTime;
+// }
+
+
 // uint8_t CalcNextWakeTime(void)
 // {
 //   DateTime now = SleepyPi.readTime();
@@ -237,8 +251,7 @@ void PrintRTCRegisters(void)
 //
 // **********************************************************************
 
-void setup()
-{
+void setup() {
   // Configure "Standard" LED pin
   pinMode(LED_PIN, OUTPUT);
   digitalWrite(LED_PIN,LOW);    // Switch off LED
@@ -271,8 +284,7 @@ void setup()
 }
 
 
-void loop()
-{
+void loop() {
     unsigned long TimeOutStart, ElapsedTimeMs,TimeOutEnd ;
     bool pi_running;
 
@@ -314,15 +326,14 @@ void loop()
 
     // Manage the Rpi shutdown. Give it a maximum time limit to stay awake
     // if it hasn't already shut down
-    delay(10000);        // wait to boot up a bit - (this delay should really be added to MAX_RPI_TIME_TO_STAY_AWAKE_MS)
+//    delay(10000);        // wait to boot up a bit - (this delay should really be added to MAX_RPI_TIME_TO_STAY_AWAKE_MS)
     TimeOutStart = millis();
     ElapsedTimeMs = TimeOutStart;
     TimeOutEnd = TimeOutStart + MAX_RPI_TIME_TO_STAY_AWAKE_MS;
     pi_running = SleepyPi.checkPiStatus(kPI_CURRENT_THRESHOLD_MA,false);
     // Wait until either the Pi shuts down through user action i.e sudo shutdown -h now
     // or the timer expires
-    while((pi_running == true) && (ElapsedTimeMs < TimeOutEnd))
-    {
+    while((pi_running == true) && (ElapsedTimeMs < TimeOutEnd)) {
         pi_running = SleepyPi.checkPiStatus(kPI_CURRENT_THRESHOLD_MA,false);
         ElapsedTimeMs = millis();
         delay(1000);
@@ -336,7 +347,7 @@ void loop()
     }
 
     // Start a shutdown
-    if(pi_running == true){
+    if (pi_running == true) {
         // Do a commanded shutdown
         SleepyPi.piShutdown();
         SleepyPi.enableExtPower(false);
