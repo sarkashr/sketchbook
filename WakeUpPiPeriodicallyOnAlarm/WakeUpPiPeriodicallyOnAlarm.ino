@@ -40,7 +40,7 @@ const int LED_PIN = 13;
 // ++++++++++++++++++++ CHANGE ME ++++++++++++++++++
 uint8_t  WakeUp_StartMinute   = 5;   // Minutes
 
-unsigned long    MAX_RPI_TIME_TO_STAY_AWAKE_MS  = 99000;       // in ms - so this is 60 seconds
+unsigned long    MAX_RPI_TIME_TO_STAY_AWAKE_MS  = 180000;       // in ms - so this is 180 seconds
 #define kPI_CURRENT_THRESHOLD_MA   110                         // Shutdown current threshold in mA. When the
                                                                // when the Rpi is below this, it is "shutdown"
                                                                // This will vary from Rpi model to Rpi model

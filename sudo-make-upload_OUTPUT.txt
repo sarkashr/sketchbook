@@ -1,0 +1,71 @@
+pi@raspberrypi:~/sketchbook/WakeUpPiPeriodicallyOnAlarm $ sudo make upload
+-------------------------
+Arduino.mk Configuration:
+- [AUTODETECTED]       CURRENT_OS = LINUX 
+- [USER]               ARDUINO_DIR = /usr/share/arduino 
+- [COMPUTED]           ARDMK_DIR = /usr/share/arduino (relative to Common.mk)
+- [AUTODETECTED]       ARDUINO_VERSION = 105 
+- [DEFAULT]            ARCHITECTURE =  
+- [DEFAULT]            ARDMK_VENDOR = arduino 
+- [DEFAULT]            ARDUINO_SKETCHBOOK =  
+- [BUNDLED]            AVR_TOOLS_DIR = /usr/share/arduino/hardware/tools/avr (in Arduino distribution)
+- [COMPUTED]           ARDUINO_LIB_PATH = /usr/share/arduino/libraries (from ARDUINO_DIR)
+- [COMPUTED]           ARDUINO_VAR_PATH = /usr/share/arduino/hardware/arduino//variants (from ARDUINO_DIR)
+- [COMPUTED]           BOARDS_TXT = /usr/share/arduino/hardware/arduino//boards.txt (from ARDUINO_DIR)
+- [USER]               USER_LIB_PATH = /home/pi/sketchbook/libraries 
+- [DEFAULT]            PRE_BUILD_HOOK = pre-build-hook.sh 
+- [USER]               BOARD_TAG = fio 
+- [COMPUTED]           CORE = arduino (from build.core)
+- [COMPUTED]           VARIANT = eightanaloginputs (from build.variant)
+- [COMPUTED]           OBJDIR = build-fio (from BOARD_TAG)
+- [COMPUTED]           ARDUINO_CORE_PATH = /usr/share/arduino/hardware/arduino//cores/arduino (from ARDUINO_DIR, BOARD_TAG and boards.txt)
+- [DETECTED]           MONITOR_BAUDRATE = 9600  (in sketch)
+- [DEFAULT]            OPTIMIZATION_LEVEL = s 
+- [DEFAULT]            MCU_FLAG_NAME = mmcu 
+- [DEFAULT]            CFLAGS_STD = -std=gnu11 -flto -fno-fat-lto-objects 
+- [DEFAULT]            CXXFLAGS_STD = -std=gnu++11 -fno-threadsafe-statics -flto 
+- [COMPUTED]           DEVICE_PATH = /dev/ttyS0 (from MONITOR_PORT)
+- [DEFAULT]            FORCE_MONITOR_PORT =  
+- [AUTODETECTED]       Size utility: AVR-aware for enhanced output
+-
+-                      ARDUINO_LIBS =
+- [USER]                 LowPower
+- [USER]                 PCF8523
+- [USER]                 SleepyPi2
+- [USER]                 Time
+- [SYSTEM]               Wire
+- [COMPUTED]           BOOTLOADER_PARENT = /usr/share/arduino/hardware/arduino//bootloaders (from ARDUINO_DIR)
+- [COMPUTED]           ARDMK_VERSION = 1.5 
+- [COMPUTED]           CC_VERSION = 5.4.0 (avr-gcc)
+-------------------------
+mkdir -p build-fio
+make reset
+make[1]: Entering directory '/home/pi/sketchbook/WakeUpPiPeriodicallyOnAlarm'
+/usr/bin/ard-reset-arduino  /dev/ttyS0
+make[1]: Leaving directory '/home/pi/sketchbook/WakeUpPiPeriodicallyOnAlarm'
+make do_upload
+make[1]: Entering directory '/home/pi/sketchbook/WakeUpPiPeriodicallyOnAlarm'
+/usr/share/arduino/hardware/tools/avr/../avrdude -q -V -p atmega328p -C /usr/share/arduino/hardware/tools/avr/../avrdude.conf -D -c arduino -b 57600 -P /dev/ttyS0 \
+		-U flash:w:build-fio/WakeUpPiPeriodicallyOnAlarm.hex:i
+done with autoreset - ignore Broken pipe errors if Done uploading
+strace: |autoreset: Broken pipe
+strace: |autoreset: Broken pipe
+
+avrdude-original: AVR device initialized and ready to accept instructions
+avrdude-original: Device signature = 0x1e950f (probably m328p)
+avrdude-original: reading input file "build-fio/WakeUpPiPeriodicallyOnAlarm.hex"
+avrdude-original: writing flash (6692 bytes):
+avrdude-original: 6692 bytes of flash written
+
+avrdude-original: safemode: Fuses OK (E:00, H:00, L:00)
+strace: |autoreset: Broken pipe
+strace: |autoreset: Broken pipe
+strace: |autoreset: Broken pipe
+strace: |autoreset: Broken pipe
+strace: |autoreset: Broken pipe
+
+avrdude-original done.  Thank you.
+
+strace: |autoreset: Broken pipe
+make[1]: Leaving directory '/home/pi/sketchbook/WakeUpPiPeriodicallyOnAlarm'
+
